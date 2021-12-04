@@ -104,10 +104,11 @@
             return departement == row.dep; // find renvoie la ligne du tableau si la fonction qu'on lui passe en argument renvoie True.
           });
 
-          //console.log(jourDepChoisi);
+          console.log(jourDepChoisi);
           json.features[j].properties.value = jourDepChoisi;
         }
-        var date = new Date(json.features[0].properties.value[0].jour);
+        //var date = new Date(json.features[0].properties.value[0].jour);
+        var date = new Date(jourDepChoisi[0].jour);
         d3.select("#day").html(
           ("0" + date.getDate()).slice(-2) +
             "/" +
@@ -121,7 +122,8 @@
             +this.value < json.features[0].properties.value.length
               ? +this.value
               : json.features[0].properties.value.length - 1;
-          date = new Date(json.features[0].properties.value[+this.value].jour);
+          //date = new Date(json.features[0].properties.value[+this.value].jour);
+          date = new Date(jourDepChoisi[+this.value].jour);
           d3.select("#day").html(
             ("0" + date.getDate()).slice(-2) +
               "/" +
