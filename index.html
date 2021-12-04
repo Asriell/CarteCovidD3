@@ -30,6 +30,17 @@
   </style>
 </head>
 <body>
+  <div>
+    <input
+      id="slider"
+      type="range"
+      value="0"
+      min="0"
+      max="178"
+      step="1"
+    /><br />
+    <span id="day">day</span>
+  </div>
   <script>
     var width = 700,
       height = 580;
@@ -96,7 +107,30 @@
           //console.log(jourDepChoisi);
           json.features[j].properties.value = jourDepChoisi;
         }
+        var date = new Date(json.features[0].properties.value[0].jour);
+        d3.select("#day").html(
+          ("0" + date.getDate()).slice(-2) +
+            "/" +
+            ("0" + (date.getMonth() + 1)).slice(-2) +
+            "/" +
+            date.getFullYear()
+        );
         map(json, 0);
+        d3.select("#slider").on("input", function () {
+          this.value =
+            +this.value < json.features[0].properties.value.length
+              ? +this.value
+              : json.features[0].properties.value.length - 1;
+          date = new Date(json.features[0].properties.value[+this.value].jour);
+          d3.select("#day").html(
+            ("0" + date.getDate()).slice(-2) +
+              "/" +
+              ("0" + (date.getMonth() + 1)).slice(-2) +
+              "/" +
+              date.getFullYear()
+          );
+          map(json, +this.value);
+        });
       });
     });
 
@@ -109,7 +143,7 @@
         .attr("class", "departement")
         .attr("d", path)
         .style("fill", function (d) {
-          console.log("d : " + JSON.stringify(d.properties));
+          //console.log("d : " + JSON.stringify(d.properties));
           var value = d.properties.value[day].hosp;
 
           if (value) {
